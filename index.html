@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday 🎂✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600;1,700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#120a24;--bg2:#2d1348;--gold:#ffd36e;--rose:#ff6fa8;--ice:#b9e6ff;--ink:#fff7ec}
+*{box-sizing:border-box;margin:0}
+body{background:radial-gradient(ellipse at 50% 0%,var(--bg2),var(--bg) 70%) fixed;color:var(--ink);font-family:Quicksand,system-ui,sans-serif;overflow-x:hidden;min-height:100vh}
+body.lock{overflow:hidden}
+canvas{position:fixed;inset:0;pointer-events:none}
+#stars{z-index:0}#fx{z-index:60}
+section{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;text-align:center;gap:18px}
+.serif{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic}
+p{line-height:1.6;max-width:34ch}
+button{font:inherit;color:var(--bg);background:linear-gradient(135deg,var(--gold),var(--rose));border:0;border-radius:999px;padding:14px 28px;font-weight:600;cursor:pointer;box-shadow:0 0 28px #ff6fa866;transition:transform .2s}
+button:hover{transform:scale(1.06)}button:focus-visible{outline:3px solid var(--ice);outline-offset:3px}
+/* gate */
+#gate{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:radial-gradient(circle,var(--bg2),var(--bg));transition:opacity 1.2s,visibility 1.2s;text-align:center;padding:20px}
+#gate.gone{opacity:0;visibility:hidden}
+.gift{font-size:96px;animation:bob 2.2s ease-in-out infinite;filter:drop-shadow(0 0 30px var(--gold));cursor:pointer;background:none;box-shadow:none;padding:0}
+.gift:hover{transform:scale(1.1) rotate(-6deg)}
+@keyframes bob{50%{transform:translateY(-16px) rotate(4deg)}}
+#gate h2{font-size:clamp(28px,7vw,46px)}
+/* hero */
+.hello{font-size:clamp(26px,6vw,40px);color:var(--gold)}
+#name{font-size:clamp(64px,19vw,190px);line-height:1;display:flex;flex-wrap:wrap;justify-content:center}
+#name span{display:inline-block;opacity:0;background:linear-gradient(180deg,#fff,var(--gold) 55%,var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px #ffd36e88);animation:drop .9s cubic-bezier(.2,1.4,.4,1) forwards}
+@keyframes drop{from{opacity:0;transform:translateY(-120px) rotate(-20deg) scale(.4)}to{opacity:1;transform:none}}
+.hint{opacity:.7;animation:bob 2.5s infinite}
+/* balloons */
+#balloons{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.b{position:absolute;bottom:-90px;width:44px;height:56px;border-radius:50% 50% 48% 48%;animation:rise linear infinite;opacity:.85}
+.b::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:60px;background:#ffffff66}
+@keyframes rise{to{transform:translateY(-120vh) translateX(30px)}}
+/* cake */
+.cake{position:relative;width:240px;height:210px;margin-top:70px}
+.l{position:absolute;left:50%;transform:translateX(-50%);border-radius:14px}
+.l1{bottom:18px;width:240px;height:60px;background:linear-gradient(var(--rose),#c43d7c)}
+.l2{bottom:78px;width:180px;height:50px;background:linear-gradient(#ffe3ef,#ffb3d1)}
+.l3{bottom:128px;width:120px;height:42px;background:linear-gradient(var(--gold),#e0a23a)}
+.plate{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:290px;height:20px;border-radius:50%;background:#ffffff33}
+.candles{position:absolute;bottom:168px;left:50%;transform:translateX(-50%);display:flex;gap:16px}
+.c{position:relative;width:10px;height:40px;background:repeating-linear-gradient(45deg,#fff,#fff 6px,var(--ice) 6px,var(--ice) 12px);border-radius:3px;cursor:pointer}
+.c::before{content:"";position:absolute;inset:-30px -14px 0}
+.f{position:absolute;left:50%;bottom:100%;margin-left:-7px;width:14px;height:26px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(#fff,var(--gold) 50%,#ff8a3d);box-shadow:0 0 22px 8px #ffb84a99;transform-origin:50% 100%;animation:flick .35s infinite alternate;transition:opacity .4s,transform .4s}
+@keyframes flick{from{transform:scale(1,1) rotate(-3deg)}to{transform:scale(.9,1.12) rotate(3deg)}}
+.c.off .f{opacity:0;transform:scale(0);animation:none}
+.c.off::after{content:"";position:absolute;left:3px;bottom:100%;width:4px;height:4px;border-radius:50%;background:#fff8;animation:smoke 1.6s ease-out forwards}
+@keyframes smoke{to{transform:translateY(-60px) scale(7);opacity:0}}
+#wish{opacity:0;transform:scale(.8);transition:all 1s;font-size:clamp(28px,7vw,44px);color:var(--gold)}
+#wish.on{opacity:1;transform:none}
+/* cards */
+.cards{display:flex;flex-wrap:wrap;gap:20px;justify-content:center}
+.card{width:230px;height:260px;perspective:900px;cursor:pointer;border:0;background:none;box-shadow:none;padding:0;color:var(--ink)}
+.in{position:relative;width:100%;height:100%;transition:transform .8s;transform-style:preserve-3d}
+.card.open .in{transform:rotateY(180deg)}
+.fa,.ba{position:absolute;inset:0;backface-visibility:hidden;border-radius:22px;display:flex;align-items:center;justify-content:center;padding:22px;flex-direction:column;gap:10px}
+.fa{background:linear-gradient(150deg,#3b1d63,#5b2a86);border:1px solid #ffd36e66;font-size:54px}
+.ba{background:linear-gradient(150deg,var(--gold),var(--rose));color:var(--bg);transform:rotateY(180deg);font-weight:600;font-size:17px;line-height:1.5}
+.ba b{font-size:30px}
+/* letter */
+#letter{max-width:46ch;font-size:clamp(20px,4.6vw,26px);line-height:1.7;min-height:9em;color:var(--ink)}
+.sig{font-size:34px;color:var(--gold);opacity:0;transition:opacity 1.5s}.sig.on{opacity:1}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body class="lock">
+<canvas id="stars"></canvas><canvas id="fx"></canvas>
+<div id="balloons"></div>
+
+<div id="gate">
+  <button class="gift" id="open" aria-label="Open the gift">🎁</button>
+  <h2 class="serif">Tumhare liye ek surprise hai…</h2>
+  <p>Gift ko tap karo ✨</p>
+</div>
+
+<main id="main" hidden>
+  <section>
+    <div class="hello serif">Happy Birthday</div>
+    <h1 id="name" class="serif" aria-label="name"></h1>
+    <p>Aaj ka din sirf tumhara hai. Chalo, ek chhota sa jaadu dekhte hain.</p>
+    <div class="hint">Neeche scroll karo ✨</div>
+  </section>
+
+  <section>
+    <h2 class="serif" style="font-size:clamp(30px,7vw,48px)">Candles bujhao &amp; wish maango</h2>
+    <p>Har candle ko tap karo, ya neeche button dabao.</p>
+    <div class="cake"><div class="candles" id="candles"></div><div class="l l3"></div><div class="l l2"></div><div class="l l1"></div><div class="plate"></div></div>
+    <button id="blow">Phoonk maaro 🌬️</button>
+    <div id="wish" class="serif">Wish maang li? Ab woh poori hogi ✨</div>
+  </section>
+
+  <section>
+    <h2 class="serif" style="font-size:clamp(30px,7vw,48px)">Tumhare liye 3 dua’ein</h2>
+    <p>Cards ko tap karke kholo.</p>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section>
+    <h2 class="serif" style="font-size:clamp(30px,7vw,48px)">Aakhri surprise</h2>
+    <button id="last">Letter kholo 💌</button>
+    <p id="letter" class="serif"></p>
+    <div class="sig serif" id="sig"></div>
+  </section>
+</main>
+
+<script>
+/* ====== EDIT HERE ====== */
+const NAME = new URLSearchParams(location.search).get('name') || 'Ayesha';   // ya ?name=Ayesha laga kar link bhejo
+const FROM = 'Aroosha';
+const WISHES = [
+  ['🌟','Tumhari smile hamesha itni hi roshan rahe jitni aaj hai.'],
+  ['🌈','Har khwab poora ho, har dua qabool ho.'],
+  ['🎈','Itni khushiyan mile ke gin na sako, itni hansi ke thak jao!']
+];
+const LETTER = 'Dear ' + NAME + ', tum un logon mein se ho jinke hone se din khoobsurat ho jata hai. Allah tumhe sehat, kamyabi aur beshumar khushiyan de. Aaj ka din bhi, aane wala har din bhi. Happy Birthday! 🎂';
+/* ======================= */
+
+const $ = s => document.querySelector(s);
+const sc = $('#stars'), sx = sc.getContext('2d'), fc = $('#fx'), fxc = fc.getContext('2d');
+let W, H, stars = [], parts = [];
+function size(){
+  W = sc.width = fc.width = innerWidth; H = sc.height = fc.height = innerHeight;
+  stars = Array.from({length: Math.min(200, W*H/8000|0)}, () => ({x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.5+.3, p:Math.random()*6.3, s:Math.random()*.03+.008}));
+}
+size(); addEventListener('resize', size);
+
+const COLS = ['#ffd36e','#ff6fa8','#b9e6ff','#c9a0ff','#7dffb2','#fff'];
+function confetti(x, y, n = 60){
+  for(let i=0;i<n;i++){const a=-Math.PI/2+(Math.random()-.5)*1.6,v=Math.random()*11+5;
+    parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g:.22,d:.985,l:130+Math.random()*60,c:COLS[i%COLS.length],s:Math.random()*4+3,k:1,a:Math.random()*6,va:(Math.random()-.5)*.3});}
+}
+function boom(x, y, n = 70){
+  const c = COLS[Math.random()*5|0];
+  for(let i=0;i<n;i++){const a=Math.random()*6.3,v=Math.random()*6+1;
+    parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g:.06,d:.975,l:70+Math.random()*30,c,s:Math.random()*2+1.2});}
+}
+function show(n){for(let i=0;i<n;i++)setTimeout(()=>boom(Math.random()*W*.8+W*.1,Math.random()*H*.5+H*.1),i*350)}
+
+function loop(){
+  sx.clearRect(0,0,W,H); sx.fillStyle='#fff';
+  for(const s of stars){s.p+=s.s;sx.globalAlpha=.3+.7*Math.abs(Math.sin(s.p));sx.beginPath();sx.arc(s.x,s.y,s.r,0,6.3);sx.fill();}
+  fxc.clearRect(0,0,W,H); parts = parts.filter(p=>p.l>0);
+  for(const p of parts){
+    p.l--;p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.vx*=p.d;
+    fxc.globalAlpha=Math.min(1,p.l/30);fxc.fillStyle=p.c;
+    if(p.k){fxc.save();fxc.translate(p.x,p.y);fxc.rotate(p.a+=p.va);fxc.fillRect(-p.s,-p.s/2,p.s*2,p.s);fxc.restore();}
+    else{fxc.beginPath();fxc.arc(p.x,p.y,p.s,0,6.3);fxc.fill();}
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+addEventListener('pointerdown', e => boom(e.clientX, e.clientY, 22));
+
+/* gate */
+$('#open').onclick = () => {
+  $('#gate').classList.add('gone'); $('#main').hidden = false; document.body.classList.remove('lock');
+  confetti(0, H, 90); confetti(W, H, 90); setTimeout(()=>{confetti(W/2,H,120);show(4)},600);
+  [...NAME].forEach((ch,i)=>{const s=document.createElement('span');s.textContent=ch===' '?'\u00a0':ch;s.style.animationDelay=(.4+i*.12)+'s';$('#name').append(s);});
+  const cols=['#ff6fa8','#ffd36e','#b9e6ff','#c9a0ff','#7dffb2'];
+  for(let i=0;i<12;i++){const b=document.createElement('div');b.className='b';b.style.cssText=`left:${Math.random()*95}%;background:${cols[i%5]};animation-duration:${9+Math.random()*8}s;animation-delay:${Math.random()*8}s`;$('#balloons').append(b);}
+};
+
+/* cake */
+let left = 5;
+for(let i=0;i<5;i++){
+  const c=document.createElement('div');c.className='c';c.innerHTML='<div class="f"></div>';c.onclick=()=>blow(c);$('#candles').append(c);
+}
+function blow(c){
+  if(c.classList.contains('off'))return;
+  c.classList.add('off'); left--;
+  if(!left){$('#wish').classList.add('on');show(6);confetti(W/2,H*.8,150);}
+}
+$('#blow').onclick = () => document.querySelectorAll('.c').forEach((c,i)=>setTimeout(()=>blow(c),i*250));
+
+/* cards */
+WISHES.forEach(([e,t],i)=>{
+  const d=document.createElement('button');d.className='card';
+  d.innerHTML=`<div class="in"><div class="fa">${e}</div><div class="ba"><b>${e}</b>${t}</div></div>`;
+  d.onclick=()=>{d.classList.toggle('open');const r=d.getBoundingClientRect();boom(r.left+r.width/2,r.top+r.height/2,50);};
+  $('#cards').append(d);
+});
+
+/* letter */
+let typed = false;
+$('#last').onclick = () => {
+  if(typed)return; typed = true; $('#last').style.display='none';
+  show(8); confetti(W/2,H,160);
+  let i=0;const el=$('#letter');
+  (function t(){el.textContent=LETTER.slice(0,++i);if(i<LETTER.length)setTimeout(t,45);else{$('#sig').textContent='— '+FROM+' 💖';$('#sig').classList.add('on');show(10);}})();
+};
+</script>
+</body>
+</html>
